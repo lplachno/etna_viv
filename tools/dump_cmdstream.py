@@ -32,7 +32,7 @@ from binascii import b2a_hex
 
 from etnaviv.util import rnndb_path
 # Parse execution data log files
-from etnaviv.parse_fdr import ENDIAN, WORD_SPEC, ADDR_SPEC, ADDR_CHAR, WORD_CHAR, FDRLoader, Event
+from etnaviv.parse_fdr import ENDIAN, WORD_SPEC, ADDR_SPEC, ADDR_CHAR, WORD_CHAR, IOCTL_SIZE_SPEC, IOCTL_SIZE_SPEC_64B, FDRLoader, Event
 # Extract C structures from memory
 from etnaviv.extract_structure import extract_structure, ResolverBase, UNRESOLVED
 # Print C structures
@@ -303,6 +303,9 @@ def parse_arguments():
     parser.add_argument('--dump-shaders', dest='dump_shaders',
             default=False, action='store_const', const=True,
             help='Dump shaders to file')
+    parser.add_argument('--ioctl-64bit', dest='ioctl_64bit',
+            default=False, action='store_const', const=True,
+            help='Ioctl fields have 64 bits')
     return parser.parse_args()        
 
 def load_data_definitions(struct_file):
@@ -390,7 +393,11 @@ def main():
 
         print_address(f, ptr, depth)
 
-    vivante_ioctl_data_t = struct.Struct(ENDIAN + ADDR_CHAR + WORD_CHAR + ADDR_CHAR + WORD_CHAR)
+    if options.ioctl_64bit:
+        vivante_ioctl_data_t = IOCTL_SIZE_SPEC_64B
+    else:
+        vivante_ioctl_data_t = IOCTL_SIZE_SPEC
+
     f = sys.stdout
     thread_id = Counter()
 

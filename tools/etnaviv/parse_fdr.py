@@ -39,6 +39,7 @@ RECTYPE_CHAR = b'B' # always 8 bit
 MAGIC_CHAR = b'I' # always 32 bit
 WORD_CHAR = b'I' # 32 bit
 ADDR_CHAR = b'I' # 32/64 bit
+LONG_WORD = b'Q' # 64 bit
 SHORT_STRING_SIZE_CHAR = b'B'
 
 # struct specifiers for decoding
@@ -47,6 +48,8 @@ HDR_SPEC = struct.Struct(ENDIAN + MAGIC_CHAR + WORD_CHAR)
 WORD_SPEC = struct.Struct(ENDIAN + WORD_CHAR)
 ADDR_SPEC = struct.Struct(ENDIAN + ADDR_CHAR)
 RANGE_SPEC = struct.Struct(ENDIAN + ADDR_CHAR + ADDR_CHAR)
+IOCTL_SIZE_SPEC = struct.Struct(ENDIAN + ADDR_CHAR + WORD_CHAR + ADDR_CHAR + WORD_CHAR)
+IOCTL_SIZE_SPEC_64B = struct.Struct(ENDIAN + LONG_WORD + LONG_WORD + LONG_WORD + LONG_WORD)
 SHORT_STRING_SIZE_SPEC = struct.Struct(ENDIAN + SHORT_STRING_SIZE_CHAR)
 
 FDR_MAGIC = 0x8e1aaa8f
