@@ -40,16 +40,19 @@
 
 #define VIV_WAIT_INDEFINITE (0xffffffff)
 
-/* one of the features words */
-enum viv_features_word
-{
-    viv_chipFeatures = 0,
-    viv_chipMinorFeatures0 = 1,
-    viv_chipMinorFeatures1 = 2,
-    viv_chipMinorFeatures2 = 3,
-    viv_chipMinorFeatures3 = 4,
-    VIV_FEATURES_WORD_COUNT /* Must be last */
-};
+#ifdef GCABI_UINT64_POINTERS
+/* imx6 BSP 4.x Vivante driver casts all pointers to 64 bit integers
+ * provide macros to cast back and forth. */
+#define PTR_TO_VIV(x) ((gctUINT64)((size_t)(x)))
+#define VIV_TO_PTR(x) ((void*)((size_t)(x)))
+#define HANDLE_TO_VIV(x) (x)
+#define VIV_TO_HANDLE(x) (x)
+#else
+#define PTR_TO_VIV(x) (x)
+#define VIV_TO_PTR(x) (x)
+#define HANDLE_TO_VIV(x) ((void*)((size_t)(x)))
+#define VIV_TO_HANDLE(x) ((gctUINT64)(size_t)(x))
+#endif
 
 /* hardware type */
 enum viv_hw_type
@@ -59,6 +62,17 @@ enum viv_hw_type
     VIV_HW_VG = 4,
 
     VIV_HW_2D3D = VIV_HW_3D | VIV_HW_2D
+};
+
+/* Enum with indices for each of the feature words */
+enum viv_features_word
+{
+    viv_chipFeatures = 0,
+    viv_chipMinorFeatures0 = 1,
+    viv_chipMinorFeatures1 = 2,
+    viv_chipMinorFeatures2 = 3,
+    viv_chipMinorFeatures3 = 4,
+    VIV_FEATURES_WORD_COUNT /* Must be last */
 };
 
 /* Type for GPU physical address */
@@ -94,6 +108,21 @@ struct viv_conn {
     gctHANDLE process;
     struct viv_specs chip;
 };
+
+/* Type for GPU physical address */
+typedef uint32_t viv_addr_t;
+
+/* General process handle */
+typedef uint64_t viv_handle_t;
+
+/* Memory node handle */
+typedef uint64_t viv_node_t;
+
+/* GPU context handle */
+typedef uint64_t viv_context_t;
+
+/* User memory info handle */
+typedef uint64_t viv_usermem_t;
 
 /* Open connection to GPU driver.
  */

@@ -2,7 +2,7 @@ TOP=..
 
 include $(TOP)/Makefile.inc
 
-COMMON_FLAGS += -I$(TOP)/resources -I$(TOP)/driver
+COMMON_FLAGS += -I$(TOP)/resources -I$(TOP)/driver -DUSE_VIV_RAW
 LDFLAGS_ETNA = $(LDFLAGS) -L$(TOP)/etnaviv -letnaviv
 
 TARGETS = reset viv_info

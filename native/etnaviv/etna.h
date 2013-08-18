@@ -30,7 +30,12 @@
 #include <etnaviv/common.xml.h>
 #include <etnaviv/cmdstream.xml.h>
 #include <etnaviv/etna_util.h>
+
+#ifdef USE_VIV_RAW
+#include <replay/viv_raw.h>
+#else
 #include <etnaviv/viv.h>
+#endif
 
 #include <stdint.h>
 #include <stdlib.h>
